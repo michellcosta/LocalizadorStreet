@@ -61,7 +61,7 @@ function App() {
             </h1>
           </div>
           <a
-            href="https://github.com/Michell-Oliveira/LocalizadorStreet"
+            href="https://github.com/michellcosta/LocalizadorStreet"
             target="_blank"
             rel="noopener noreferrer"
             className="text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
