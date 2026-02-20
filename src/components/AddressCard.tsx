@@ -1,4 +1,4 @@
-import { Copy, MapPin, Navigation } from 'lucide-react';
+import { Copy, MapPin } from 'lucide-react';
 
 interface AddressCardProps {
     address: string;
@@ -12,8 +12,6 @@ export function AddressCard({ address }: AddressCardProps) {
 
     const mapQuery = encodeURIComponent(address);
     const mapsLink = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
-    // Usando URL base de panorama do Street View no Google Maps
-    const streetViewLink = `https://www.google.com/maps?q&layer=c&cbll=${mapQuery}`;
 
     return (
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 transition-all hover:shadow-md">
@@ -42,19 +40,10 @@ export function AddressCard({ address }: AddressCardProps) {
                     href={mapsLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors shadow-sm shadow-primary-500/20"
                 >
                     <MapPin size={16} />
                     Maps
-                </a>
-                <a
-                    href={streetViewLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors shadow-sm shadow-primary-500/20"
-                >
-                    <Navigation size={16} />
-                    Street View
                 </a>
             </div>
         </div>
