@@ -78,7 +78,7 @@ function App() {
             Desenvolvido por <span className="text-primary-600">Michell Oliveira</span>
           </h2>
           <p className="text-lg text-slate-600 dark:text-slate-400">
-            Envie uma imagem de relatório e visualize os endereços diretamente no Street View em segundos.
+            Envie uma imagem de relatório e visualize os endereços diretamente no Google Maps em segundos.
           </p>
         </div>
 
