@@ -34,24 +34,32 @@ export async function extractTextFromImage(
 
 /**
  * Filtra as linhas de texto bruto e encontra as que parecem ser endereços.
- * Usa um Regex base focado nos prefixos de ruas brasileiros.
  */
 export function filterAddressLines(lines: string[]): string[] {
-    // Como as imagens variam muito em fonte e nitidez, vamos relaxar.
-    // Manteremos apenas linhas que não parecem lixo puro curto.
-    // Se tiver pelo menos 8 caracteres e conter letras na composição, consideraremos útil de ser mostrado ao usuário
-
     return lines.filter(line => {
-        // Remover lixo pontual
+        // Remove lixo comum no inicio ou fim
         const cleanLine = line.replace(/[^a-zA-Z0-9\s,.-]/g, '').trim();
 
-        // Pelo menos 8 caracteres e deve conter pelo menos uma letra
-        if (cleanLine.length >= 8 && /[a-zA-Z]/.test(cleanLine)) {
+        // Critério 1: Regex para procurar formato "Rua...", "Travessa..." etc
+        const hasAddressPrefix = /\b(Rua|R\.|Av\.|Avenida|Estr\.|Estrada|Trav\.|Tv\.|Travessa|Praca|Praça|Rodovia|Rod\.|Al\.|Alameda)\b/i.test(cleanLine);
+
+        // Critério 2: Regex procurando por um CEP (ex: 25908-683)
+        const hasCep = /\b\d{5}-\d{3}\b/.test(cleanLine);
+
+        // Critério 3: Regex procurando padrão de Cidade - Estado (ex: Magé - RJ)
+        const hasCityState = /\b[A-Za-zÀ-ÖØ-öø-ÿ\s]+ - [A-Z]{2}\b/.test(cleanLine);
+
+        // Critério 4: Termina com "Brasil"
+        const endsWithBrasil = /\bBrasil\b/i.test(cleanLine);
+
+        // Se a linha tem o prefixo de rua OU tem formato de final de endereço (CEP, estado, país) e é minimamente longa
+        if ((hasAddressPrefix || hasCep || hasCityState || endsWithBrasil) && cleanLine.length > 15) {
             return true;
         }
+
         return false;
     }).map(line => {
-        // Retorna a linha limpando somente os caracteres ruidosos residuais de prints
-        return line.replace(/[^a-zA-Z0-9\s,.-]/g, '').trim();
+        // Limpar lixos gerados pelo OCR mantendo apóstrofos e caracteres com acentos
+        return line.replace(/[^a-zA-Z0-9\s,.\-À-ÖØ-öø-ÿ]/g, '').trim();
     });
 }
