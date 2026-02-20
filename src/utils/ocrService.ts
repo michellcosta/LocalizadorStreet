@@ -23,7 +23,9 @@ export async function extractTextFromImage(
         await worker.terminate();
 
         // Divide em linhas, remove vazias ou apenas com espaços
-        return text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+        const rawLines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+        console.log("Linhas extraídas pelo OCR:", rawLines);
+        return rawLines;
     } catch (error) {
         console.error("Erro no OCR:", error);
         throw new Error('Falha ao processar imagem.');
@@ -35,9 +37,9 @@ export async function extractTextFromImage(
  * Usa um Regex base focado nos prefixos de ruas brasileiros.
  */
 export function filterAddressLines(lines: string[]): string[] {
-    // Regex para identificar início de endereços: Rua, R., Av., Avenida, Estr., Estrada, Travessa, Trav.
-    // Permitimos letras maiúsculas/minúsculas.
-    const addressRegex = /^(Rua|R\.|Av\.|Avenida|Estr\.|Estrada|Trav\.|Travessa|Praca|Praça|Rodovia|Rod\.|Al\.|Alameda)\s+/i;
+    // Regex para identificar endereços mesmo se houver caracteres estranhos antes.
+    // Buscamos ocorrências das palavras típicas de rua ignorando case.
+    const addressRegex = /\b(Rua|R\.|Av\.|Avenida|Estr\.|Estrada|Trav\.|Travessa|Praca|Praça|Rodovia|Rod\.|Al\.|Alameda)\b/i;
 
     return lines.filter(line => {
         return addressRegex.test(line);
