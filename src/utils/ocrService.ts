@@ -40,8 +40,8 @@ export function filterAddressLines(lines: string[]): string[] {
         // Remove lixo comum no inicio ou fim
         const cleanLine = line.replace(/[^a-zA-Z0-9\s,.-]/g, '').trim();
 
-        // Critério 1: Regex para procurar formato "Rua...", "Travessa..." etc
-        const hasAddressPrefix = /\b(Rua|R\.|Av\.|Avenida|Estr\.|Estrada|Trav\.|Tv\.|Travessa|Praca|Praça|Rodovia|Rod\.|Al\.|Alameda)\b/i.test(cleanLine);
+        // Critério 1: Regex para procurar formato "Rua...", "Travessa..." etc flexíveis (com ou sem ponto)
+        const hasAddressPrefix = /\b(Rua|R\.?|Av\.?|Avenida|Estr\.?|Est\.?|Estrada|Trav\.?|Tv\.?|Travessa|Praca|Praça|Rodovia|Rod\.?|Al\.?|Alameda|Via\.?)\b/i.test(cleanLine);
 
         // Critério 2: Regex procurando por um CEP (ex: 25908-683)
         const hasCep = /\b\d{5}-\d{3}\b/.test(cleanLine);
@@ -64,7 +64,7 @@ export function filterAddressLines(lines: string[]): string[] {
 
         // Matcher que procura obrigatoriamente do Logradouro até a palavra "Brasil"
         // Ignorando datas anteriores como "18Fev2026" e sufixos como "Bs 016  74kmn60kmh"
-        const addressMatch = cleanLine.match(/\b(Rua|R\.|Av\.|Avenida|Estr\.|Estrada|Trav\.|Tv\.|Travessa|Praca|Praça|Rodovia|Rod\.|Al\.|Alameda)\b[\s\S]*?\bBrasil\b/i);
+        const addressMatch = cleanLine.match(/\b(Rua|R\.?|Av\.?|Avenida|Estr\.?|Est\.?|Estrada|Trav\.?|Tv\.?|Travessa|Praca|Praça|Rodovia|Rod\.?|Al\.?|Alameda|Via\.?)\b[\s\S]*?\bBrasil\b/i);
 
         if (addressMatch) {
             return addressMatch[0].trim();
