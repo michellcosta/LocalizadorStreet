@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Camera, Map, Trash2, Github } from 'lucide-react';
+import { Camera, Map, Trash2, Github, ChevronDown, ChevronUp } from 'lucide-react';
 import { UploadDropzone } from './components/UploadDropzone';
 import { OCRProgressBar } from './components/OCRProgressBar';
 import { AddressCard } from './components/AddressCard';
@@ -11,6 +11,7 @@ function App() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState({ value: 0, status: '' });
   const [addresses, setAddresses] = useState<string[]>([]);
+  const [isHistoryExpanded, setIsHistoryExpanded] = useState(false);
 
   const { history, addToHistory, clearHistory } = useHistory();
 
@@ -134,10 +135,15 @@ function App() {
         {/* Histórico Local */}
         {!isProcessing && history.length > 0 && (
           <div className="mt-16 animate-in fade-in duration-500">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200">
+            <div className="flex items-center justify-between mb-4">
+              <button
+                onClick={() => setIsHistoryExpanded(!isHistoryExpanded)}
+                className="flex items-center gap-2 text-xl font-bold text-slate-800 dark:text-slate-200 hover:text-primary-600 transition-colors"
+              >
                 Histórico Recente
-              </h3>
+                {isHistoryExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+              </button>
+
               <button
                 onClick={clearHistory}
                 className="flex items-center gap-2 text-sm px-3 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors"
@@ -145,11 +151,14 @@ function App() {
                 <Trash2 size={16} /> Limpar
               </button>
             </div>
-            <div className="grid gap-3 opacity-75 grayscale hover:grayscale-0 focus-within:grayscale-0 hover:opacity-100 transition-all duration-300">
-              {history.map((addr, idx) => (
-                <AddressCard key={`hist-${idx}`} address={addr} />
-              ))}
-            </div>
+
+            {isHistoryExpanded && (
+              <div className="grid gap-3 opacity-90 animate-in slide-in-from-top-4 fade-in duration-300">
+                {history.map((addr, idx) => (
+                  <AddressCard key={`hist-${idx}`} address={addr} />
+                ))}
+              </div>
+            )}
           </div>
         )}
 
