@@ -75,7 +75,7 @@ function App() {
 
         <div className="text-center max-w-2xl mx-auto mb-10">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight">
-            OCR <span className="text-primary-600">→</span> Street View
+            Desenvolvido por <span className="text-primary-600">Michell Oliveira</span>
           </h2>
           <p className="text-lg text-slate-600 dark:text-slate-400">
             Envie uma imagem de relatório e visualize os endereços diretamente no Street View em segundos.
