@@ -12,7 +12,8 @@ export function AddressCard({ address }: AddressCardProps) {
 
     const mapQuery = encodeURIComponent(address);
     const mapsLink = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
-    const streetViewLink = `https://www.google.com/maps/search/?api=1&query=${mapQuery}&layer=c`;
+    // Usando URL base de panorama do Street View no Google Maps
+    const streetViewLink = `https://www.google.com/maps?q&layer=c&cbll=${mapQuery}`;
 
     return (
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 transition-all hover:shadow-md">
