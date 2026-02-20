@@ -59,7 +59,17 @@ export function filterAddressLines(lines: string[]): string[] {
 
         return false;
     }).map(line => {
-        // Limpar lixos gerados pelo OCR mantendo apóstrofos e caracteres com acentos
-        return line.replace(/[^a-zA-Z0-9\s,.\-À-ÖØ-öø-ÿ]/g, '').trim();
+        // Limpar lixos iniciais e manter caracteres acentuados
+        let cleanLine = line.replace(/[^a-zA-Z0-9\s,.\-À-ÖØ-öø-ÿ]/g, '').trim();
+
+        // Matcher que procura obrigatoriamente do Logradouro até a palavra "Brasil"
+        // Ignorando datas anteriores como "18Fev2026" e sufixos como "Bs 016  74kmn60kmh"
+        const addressMatch = cleanLine.match(/\b(Rua|R\.|Av\.|Avenida|Estr\.|Estrada|Trav\.|Tv\.|Travessa|Praca|Praça|Rodovia|Rod\.|Al\.|Alameda)\b[\s\S]*?\bBrasil\b/i);
+
+        if (addressMatch) {
+            return addressMatch[0].trim();
+        }
+
+        return cleanLine;
     });
 }
