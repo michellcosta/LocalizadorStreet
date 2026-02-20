@@ -37,15 +37,21 @@ export async function extractTextFromImage(
  * Usa um Regex base focado nos prefixos de ruas brasileiros.
  */
 export function filterAddressLines(lines: string[]): string[] {
-    // Regex para identificar endereços mesmo se houver caracteres estranhos antes.
-    // Buscamos ocorrências das palavras típicas de rua ignorando case.
-    const addressRegex = /\b(Rua|R\.|Av\.|Avenida|Estr\.|Estrada|Trav\.|Travessa|Praca|Praça|Rodovia|Rod\.|Al\.|Alameda)\b/i;
+    // Como as imagens variam muito em fonte e nitidez, vamos relaxar.
+    // Manteremos apenas linhas que não parecem lixo puro curto.
+    // Se tiver pelo menos 8 caracteres e conter letras na composição, consideraremos útil de ser mostrado ao usuário
 
     return lines.filter(line => {
-        return addressRegex.test(line);
+        // Remover lixo pontual
+        const cleanLine = line.replace(/[^a-zA-Z0-9\s,.-]/g, '').trim();
+
+        // Pelo menos 8 caracteres e deve conter pelo menos uma letra
+        if (cleanLine.length >= 8 && /[a-zA-Z]/.test(cleanLine)) {
+            return true;
+        }
+        return false;
     }).map(line => {
-        // Limpeza de caracteres ruidosos no final (comum em prints soltos)
-        // Remove traços ou caracteres não alfanuméricos isolados no final.
-        return line.replace(/[^a-zA-Z0-9\s,.-]$/g, '').trim();
+        // Retorna a linha limpando somente os caracteres ruidosos residuais de prints
+        return line.replace(/[^a-zA-Z0-9\s,.-]/g, '').trim();
     });
 }
